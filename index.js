@@ -29,11 +29,15 @@ function millisToXCoordinate(ms) {
 }
 
 
-// Keep all of progress statistics in a single JSON object... this will make it easy to save / load from window.localstorage
-let stats = {
-	experiencePoints: 0,
-	stacks: 0,
-}
+// A csv file that stores information about the unlockable system. Each row contains:
+// 	level - the player level at which this unlockable is obtained
+//	startExp - the amount of experience points needed to reach this level
+//	endExp - the amount of experience points needed to reach this level
+//  name - the plain text "name" of the color unlocked at this level
+//	rgb - the RGB string for this color (can be passed to p5.createColor())
+let unlockablesTable;
+let unlockables;
+
 
 let collectableAnimation;
 let collectablesTable;
@@ -60,6 +64,7 @@ function preload() {
 
 	// Note that `loadTable()` is asynchronous, so we have to divide level loading across preload() and setup() functions :(
 	collectablesTable = loadTable('./assets/level-1.csv', 'csv', 'header');
+	unlockablesTable = loadTable('./assets/unlockables.csv', 'csv', 'header');
 }
 
 
@@ -73,9 +78,21 @@ function setup() {
 	playerInhaleAnimation.looping = false;
 
 	collectables = collectablesTable.getRows().map(r => new Collectable(r.getNum('ms'), r.getNum('lane'), r.getString('group')));
-	player = new Player();
+	unlockables = unlockablesTable.getRows().map(function(r) {
+		return {
+			level: r.getNum('level'),
+			startExp: r.getNum('startExp'),
+			endExp: r.getNum('endExp'),
+			color: {
+				name: r.getString('name'),
+				rgb: r.getString('rgb'),
+			},
+		}
+	});
 
-	experiencePointsBar = new ExperiencePointsBar(20, 20, 0.2 * width, 20, 0, 20000, stats.experiencePoints);
+	player = new Player();
+	experiencePointsBar = new ExperiencePointsBar(20, 20, 0.2 * width, 20);
+	experiencePointsBar.configureForPlayer(player);
 }
 
 
@@ -97,8 +114,8 @@ function draw() {
 	// Note that sprite and collectable must be removed separately (p5.game maintains an internal list of sprites)
 	collectables.forEach((collectable, index, array) => {
 		if (collectable.sprite.overlap(player.sprite)) {
-			stats.experiencePoints += 100;
-			experiencePointsBar.val += 100;
+			addScore(100);
+			checkForLevelUp();
 			collectable.sprite.remove();
 			array.splice(index, 1);
 		}
@@ -113,6 +130,22 @@ function draw() {
 	// This allows score to be drawn relative to current `viewport`, as opposed to the scene
 	camera.off();
 	experiencePointsBar.draw();
+}
+
+function addScore(n) {
+	experiencePointsBar.val += 100;
+	player.stats.experiencePoints += 100;
+	player.save();
+}
+
+function checkForLevelUp() {
+	if (player.stats.experiencePoints >= player.stats.level.endExp) {
+		let nextLevel = unlockables.find(element => element.level == player.stats.level.level + 1);
+		player.stats.level = nextLevel;
+		player.stats.colors.push(nextLevel.color);
+		player.save();
+		experiencePointsBar.configureForPlayer(player);
+	}
 }
 
 
@@ -150,6 +183,7 @@ class Collectable {
 
 class Player {
 	constructor() {
+		this._loadStats();
 		this._lane = 0;
 		this.sprite = (createSprite(millisToXCoordinate(millis()), laneToYCoordinate(this._lane)));
 		this.sprite.addImage('normal', playerImage);
@@ -157,6 +191,22 @@ class Player {
 
 		// TODO - might be better to just resize the actual image to desired size once we finalize the assets
 		this.sprite.scale = 0.7;
+	}
+
+	_loadStats() {
+		this.stats = JSON.parse(getItem('stats'));
+		if (this.stats == null) {
+			this.stats = {
+				experiencePoints: 0,
+				level: unlockables.find(element => element.level == 1),
+				colors: [unlockables.find(element => element.level == 1).color],
+			};
+			this.save();
+		}
+	}
+
+	save() {
+		storeItem('stats', JSON.stringify(this.stats));
 	}
 
 	get lane() {
@@ -171,17 +221,20 @@ class Player {
 }
 
 class ExperiencePointsBar {
-  constructor(x, y, w, h, minVal, maxVal, val=minVal) {
+  constructor(x, y, w, h) {
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
-    this.minVal = minVal;
-    this.maxVal = maxVal;
-    this._val = val;
-
     this.padding = 5;
   }
+
+  configureForPlayer(player) {
+		this.text = 'lv. ' + player.stats.level.level;
+		this.minVal = player.stats.level.startExp;
+		this.maxVal = player.stats.level.endExp;
+		this._val = player.stats.experiencePoints;
+	}
 
   set val(v) {
     v = Math.max(this.minVal, v);
@@ -211,6 +264,10 @@ class ExperiencePointsBar {
     fill(color(0, 0, 255, 100));
     translate(this.padding, this.padding);
     rect(0, 0, w, this.h - (2*this.padding), this.h/2);
+
+    textAlign(LEFT, BOTTOM);
+    textSize(16);
+    text(this.text, 0, this.y + this.h);
     pop();
   }
 }
