@@ -105,21 +105,23 @@ function draw() {
 		image(backgroundImage, x, 0, backgroundImage.width, height);
 	}
 
-	// Player moves at a uniform horizontal speed across the level with scrolling camera
-	player.sprite.position.x = millisToXCoordinate(millis());
-	camera.position.x = player.sprite.position.x + 0.4*width;
+	if (millis() <= levelDurationMillis) {
+		// Player moves at a uniform horizontal speed across the level with scrolling camera
+		player.sprite.position.x = millisToXCoordinate(millis());
+		camera.position.x = player.sprite.position.x + 0.4*width;
 
 
-	// Test for collisions with collectables
-	// Note that sprite and collectable must be removed separately (p5.game maintains an internal list of sprites)
-	collectables.forEach((collectable, index, array) => {
-		if (collectable.sprite.overlap(player.sprite)) {
-			addScore(100);
-			checkForLevelUp();
-			collectable.sprite.remove();
-			array.splice(index, 1);
-		}
-	});
+		// Test for collisions with collectables
+		// Note that sprite and collectable must be removed separately (p5.game maintains an internal list of sprites)
+		collectables.forEach((collectable, index, array) => {
+			if (collectable.sprite.overlap(player.sprite)) {
+				addScore(100);
+				checkForLevelUp();
+				collectable.sprite.remove();
+				array.splice(index, 1);
+			}
+		});
+	}
 
 	// Uncomment this line to display collision boxes for all sprites
 	//getSprites().forEach(s => s.debug = true);
@@ -130,6 +132,10 @@ function draw() {
 	// This allows score to be drawn relative to current `viewport`, as opposed to the scene
 	camera.off();
 	experiencePointsBar.draw();
+
+	if (millis() > levelDurationMillis) {
+		drawEndCard();
+	}
 }
 
 function addScore(n) {
@@ -148,6 +154,24 @@ function checkForLevelUp() {
 	}
 }
 
+function drawEndCard() {
+	push();
+
+	rectMode(CORNER);
+	noStroke();
+	fill(color(0, 0, 0, 200));
+	rect(0, 0, width, height);
+
+	textAlign(CENTER, CENTER);
+	textSize(50);
+	stroke(255);
+	strokeWeight(1);
+	fill(255)
+	text('Great Work!', width/2, height/2);
+
+	textSize(24);
+	text('Summary metrics here...', width/2, (height/2) + 100);
+}
 
 // Stubbed keyboard controls for now...
 function keyPressed() {
