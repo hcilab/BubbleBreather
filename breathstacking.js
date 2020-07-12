@@ -109,7 +109,7 @@ function draw() {
 
 	// A naive implementation of a continuous background with panning camera is to simply repeat the background image across the entire scene.
 	// TODO: Only draw the visible images in each frame if this causes a performance hit.
-	for (let x=0; x<sceneWidth; x+= backgroundImage.width) {
+	for (let x=-backgroundImage.width; x<sceneWidth; x+= backgroundImage.width) {
 		image(backgroundImage, x, 0, backgroundImage.width, height);
 	}
 
