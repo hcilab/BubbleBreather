@@ -117,8 +117,6 @@ function draw() {
 	if (levelStartMillis != -1 && millis()-levelStartMillis <= levelDurationMillis) {
 		// Player moves at a uniform horizontal speed across the level with scrolling camera
 		player.sprite.position.x = millisToXCoordinate(millis()-levelStartMillis);
-		camera.position.x = player.sprite.position.x + 0.4*width;
-
 
 		// Test for collisions with collectables
 		// Note that sprite and collectable must be removed separately (p5.game maintains an internal list of sprites)
@@ -131,6 +129,7 @@ function draw() {
 			}
 		});
 	}
+	camera.position.x = player.sprite.position.x + 0.4*width;
 
 	// Uncomment this line to display collision boxes for all sprites
 	//getSprites().forEach(s => s.debug = true);
