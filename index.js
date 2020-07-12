@@ -63,7 +63,6 @@ function preload() {
 
 function setup() {
 	createCanvas(windowWidth, 600);
-	// background(128); // original
 	collectables = collectablesTable.getRows().map(r => new Collectable(r.getNum('ms'), r.getNum('lane'), r.getString('group')));
 	player = new Player();
 	x2 = width; // reyhan
@@ -72,7 +71,6 @@ function setup() {
 
 function draw() {
 	clear();
-	// background(128); // original
 
 	// continous scrolling background, still buggy: does not repeat the background image
 	image(backgroundImage, x1, 0, width, height); // reyhan
@@ -174,7 +172,6 @@ class Player {
 	set lane(lane) {
 		this._lane = lane;
 		this.sprite.position.y = laneToYCoordinate(this._lane);
-		// this.sprite.scale = 1.0 + (this._lane * 0.2); // original
 		this.sprite.scale = 0.7 + (this._lane * 0.1); // reyhan - rescaled sprite
 	}
 }
