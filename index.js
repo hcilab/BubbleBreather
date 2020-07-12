@@ -44,10 +44,6 @@ let playerImageInhale; // reyhan
 let player;
 
 let backgroundImage; // reyhan
-let x1 = 0; // reyhan
-let x2; // reyhan
-
-let scrollSpeed = 1; // reyhan
 
 
 function preload() {
@@ -65,25 +61,16 @@ function setup() {
 	createCanvas(windowWidth, 600);
 	collectables = collectablesTable.getRows().map(r => new Collectable(r.getNum('ms'), r.getNum('lane'), r.getString('group')));
 	player = new Player();
-	x2 = width; // reyhan
 }
 
 
 function draw() {
 	clear();
 
-	// continous scrolling background, still buggy: does not repeat the background image
-	image(backgroundImage, x1, 0, width, height); // reyhan
-	image(backgroundImage, x2, 0, width, height); // reyhan
-
-	x1 -= scrollSpeed; // reyhan
-	x2 -= scrollSpeed; // reyhan
-
-	if (x1 < -width) { // reyhan
-		x1 = width;
-	}
-	if (x2 < -width) { // reyhan
-		x2 = width;
+	// A naive implementation of a continuous background with panning camera is to simply repeat the background image across the entire scene.
+	// TODO: Only draw the visible images in each frame if this causes a performance hit.
+	for (let x=0; x<sceneWidth; x+= backgroundImage.width) {
+		image(backgroundImage, x, 0, backgroundImage.width, height);
 	}
 
 	// Player moves at a uniform horizontal speed across the level with scrolling camera
