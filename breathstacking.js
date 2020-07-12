@@ -182,6 +182,8 @@ function drawEndCard() {
 
 	textSize(24);
 	text('Summary metrics here...', width/2, (height/2) + 100);
+
+	pop();
 }
 
 // Stubbed keyboard controls for now...
