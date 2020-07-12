@@ -1,14 +1,13 @@
-let stats;
-
-function preload() {
-	stats = JSON.parse(getItem('stats'));
-}
-
 function setup() {
 	noCanvas();
+	populatePlayerStats();
+}
+
+function populatePlayerStats() {
 	let p = select('#playerStatsP');
 	if (p != null) {
-		let content = stats == null ? "You haven't collected any bubbles yet!" : JSON.stringify(stats);
+		let playerStats = JSON.parse(getItem('stats'))
+		let content = playerStats == null ? "You haven't collected any bubbles yet!" : JSON.stringify(playerStats);
 		p.html(content);
 	}
 }
