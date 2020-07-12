@@ -31,7 +31,7 @@ function millisToXCoordinate(ms) {
 
 // Keep all of progress statistics in a single JSON object... this will make it easy to save / load from window.localstorage
 let stats = {
-	score: 0,
+	experiencePoints: 0,
 	stacks: 0,
 }
 
@@ -42,6 +42,8 @@ let collectables;
 let playerImage;
 let playerInhaleAnimation;
 let player;
+
+let experiencePointsBar;
 
 let backgroundImage; // reyhan
 
@@ -72,6 +74,8 @@ function setup() {
 
 	collectables = collectablesTable.getRows().map(r => new Collectable(r.getNum('ms'), r.getNum('lane'), r.getString('group')));
 	player = new Player();
+
+	experiencePointsBar = new ExperiencePointsBar(20, 20, 0.2 * width, 20, 0, 20000, stats.experiencePoints);
 }
 
 
@@ -93,7 +97,8 @@ function draw() {
 	// Note that sprite and collectable must be removed separately (p5.game maintains an internal list of sprites)
 	collectables.forEach((collectable, index, array) => {
 		if (collectable.sprite.overlap(player.sprite)) {
-			stats.score += 100;
+			stats.experiencePoints += 100;
+			experiencePointsBar.val += 100;
 			collectable.sprite.remove();
 			array.splice(index, 1);
 		}
@@ -107,16 +112,9 @@ function draw() {
 	// This disables the camera's virtual coordinate system for the remainder of the frame...
 	// This allows score to be drawn relative to current `viewport`, as opposed to the scene
 	camera.off();
-	drawScore();
+	experiencePointsBar.draw();
 }
 
-function drawScore() {
-	push();
-	stroke(255);
-	fill(255);
-	textSize(32);
-	text(stats.score, 50, 50);
-}
 
 // Stubbed keyboard controls for now...
 function keyPressed() {
@@ -170,4 +168,49 @@ class Player {
 		this.sprite.position.y = laneToYCoordinate(this._lane);
 		this.sprite.scale = 0.7 + (this._lane * 0.1); // reyhan - rescaled sprite
 	}
+}
+
+class ExperiencePointsBar {
+  constructor(x, y, w, h, minVal, maxVal, val=minVal) {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+    this.minVal = minVal;
+    this.maxVal = maxVal;
+    this._val = val;
+
+    this.padding = 5;
+  }
+
+  set val(v) {
+    v = Math.max(this.minVal, v);
+    v = Math.min(this.maxVal, v);
+    this._val = v;
+  }
+
+  get val() {
+    return this._val;
+  }
+
+  draw() {
+    push();
+    rectMode(CORNERS);
+    rect
+
+    // border
+    stroke(color(0, 0, 255, 200));
+    strokeWeight(2);
+    noFill();
+    translate(this.x, this.y);
+    rect(0, 0, this.w, this.h, this.h/2);
+
+    // status bar
+    let w = map(this._val, this.minVal, this.maxVal, 0, this.w - (2*this.padding));
+    noStroke();
+    fill(color(0, 0, 255, 100));
+    translate(this.padding, this.padding);
+    rect(0, 0, w, this.h - (2*this.padding), this.h/2);
+    pop();
+  }
 }
