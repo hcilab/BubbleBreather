@@ -23,6 +23,7 @@ function laneToYCoordinate(lane) {
 // Similarly, input coordinates are specified as time offsets (ms), making it easier to design levels that align with breath stacking timing requiremets (e.g., hold for 2 seconds...)
 // These parameters can be tweaked to adjust the speed of the game
 let levelDurationMillis = 120000;
+let levelStartMillis = -1;
 let sceneWidth = 12000;
 function millisToXCoordinate(ms) {
 	return map(ms, 0, levelDurationMillis, 0, sceneWidth);
@@ -113,9 +114,9 @@ function draw() {
 		image(backgroundImage, x, 0, backgroundImage.width, height);
 	}
 
-	if (millis() <= levelDurationMillis) {
+	if (levelStartMillis != -1 && millis()-levelStartMillis <= levelDurationMillis) {
 		// Player moves at a uniform horizontal speed across the level with scrolling camera
-		player.sprite.position.x = millisToXCoordinate(millis());
+		player.sprite.position.x = millisToXCoordinate(millis()-levelStartMillis);
 		camera.position.x = player.sprite.position.x + 0.4*width;
 
 
@@ -142,7 +143,11 @@ function draw() {
 	experiencePointsBar.draw();
 	levelUpAnimation.draw(150, 50);
 
-	if (millis() > levelDurationMillis) {
+	if (levelStartMillis == -1) {
+		drawTitleCard();
+	}
+
+	if (millis()-levelStartMillis > levelDurationMillis) {
 		drawEndCard();
 	}
 }
@@ -163,6 +168,28 @@ function checkForLevelUp() {
 		player.save();
 		experiencePointsBar.configureForPlayer(player);
 	}
+}
+
+function drawTitleCard() {
+	push();
+
+	rectMode(CORNER);
+	noStroke();
+	fill(color(0, 0, 0, 200));
+	rect(0, 0, width, height);
+
+	textAlign(CENTER, CENTER);
+	textSize(50);
+	stroke(255);
+	strokeWeight(1);
+	fill(255)
+	text('-- Bubble Breather --', width/2, height/3);
+
+	textAlign(LEFT, TOP);
+	textSize(24);
+	text('Bubbles jumps whenever you stack your breath - Collect the bubbles by stacking your breaths at the right time!\n\nPress Spacebar to start...', width/3, (height/3) + 50, width/3);
+
+	pop();
 }
 
 function drawEndCard() {
@@ -197,6 +224,9 @@ function keyPressed() {
 		case 's':
 			player.lane = 0;
 			player.sprite.changeAnimation('normal');
+			break;
+		case ' ':
+			levelStartMillis = millis();
 			break;
 	}
 }
