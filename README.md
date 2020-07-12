@@ -8,6 +8,16 @@ Bubble Breather is a side-scrolling game that promotes breath stacking. Players 
 A live demo of the game can be found here: https://hcilab.github.io/BubbleBreather/
 
 
+# Unlocking Colors
+
+Collect bubbles to level up and unlock new colors!
+
+
+# Reseting Game Progress
+
+All saved game data can be deleted here: https://hcilab.github.io/BubbleBreather/reset.html
+
+
 # Controls
 
 The game is currently played using the keyboard:
@@ -16,3 +26,5 @@ The game is currently played using the keyboard:
 |:---:|:----:|
 |W    |Jump  |
 |S    |Fall  |
+
+ 
