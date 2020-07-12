@@ -35,21 +35,25 @@ let stats = {
 	stacks: 0,
 }
 
-let collectableImage;
+let collectableAnimation;
 let collectablesTable;
 let collectables;
 
 let playerImage;
-let playerImageInhale; // reyhan
+let playerInhaleAnimation;
 let player;
 
 let backgroundImage; // reyhan
 
 
 function preload() {
-	collectableImage = loadImage('./assets/collectable.png');
+	// @Reyhan - I've quickly made these assets as placeholders for now, but note that animations can be adjusted by editing the files specified in `loadAnimation()` below.
+	// Note that if you add more / fewer animation frames, you may need to tweak the `frameDelay` field below, which specifies the speed of the animation (i.e., the number of game frames to delay before switching animation frames)
+	collectableAnimation = loadAnimation('./assets/collectable-0.png', './assets/collectable-1.png');
+
 	playerImage = loadImage('./assets/player_normal.png');
-	playerImageInhale = loadImage('./assets/player_inhale.png'); // reyhan
+	playerInhaleAnimation = loadAnimation('./assets/player-inhale-0.png', './assets/player-inhale-1.png', './assets/player-inhale-2.png', './assets/player-inhale-3.png');
+
 	backgroundImage = loadImage('./assets/background.png'); // reyhan
 
 	// Note that `loadTable()` is asynchronous, so we have to divide level loading across preload() and setup() functions :(
@@ -59,6 +63,13 @@ function preload() {
 
 function setup() {
 	createCanvas(windowWidth, 600);
+
+	// TODO: This binds the animation speed to the framerate of the game... is this how it's normally done, or is there a way to specify animation time in ms?
+	collectableAnimation.frameDelay = 30;
+
+	playerInhaleAnimation.frameDelay = 4;
+	playerInhaleAnimation.looping = false;
+
 	collectables = collectablesTable.getRows().map(r => new Collectable(r.getNum('ms'), r.getNum('lane'), r.getString('group')));
 	player = new Player();
 }
@@ -112,16 +123,12 @@ function keyPressed() {
 	switch (key) {
 		case 'w':
 			player.lane = Math.min(player.lane + 1, 4);
-			player.sprite.addImage(playerImageInhale); // reyhan - inhale sprite
-			// @Reyhan - animation sequences can be fired here: http://molleindustria.github.io/p5.play/docs/classes/Sprite.html#method-changeAnimation
-			// You may even want to "jump" play the animation for a set amount of time, then switch back to regular one using a timeout:
-					// player.setAnimation('jump');
-					// setTimeout(() => player.setAnimation('normal'), 1000);
+			player.sprite.changeAnimation('inhale');
+			setTimeout(function() { player.sprite.changeAnimation('normal') }.bind(this), 500);
 			break;
 		case 's':
 			player.lane = 0;
-			player.sprite.addImage(playerImage); // reyhan - exhale sprite
-			// @Reyhan - similar idea here... maybe we want some kind of ground-pound animation when they exhale or something...
+			player.sprite.changeAnimation('normal');
 			break;
 	}
 }
@@ -135,10 +142,10 @@ class Collectable {
 		this.group = group;
 
 		this.sprite = createSprite(millisToXCoordinate(this.ms), laneToYCoordinate(this.lane));
-		this.sprite.addImage(collectableImage);
-		this.sprite.scale = 0.5; // reyhan - rescaled sprite
+		this.sprite.addAnimation('bubble', collectableAnimation);
 
-		// @Reyhan - animation sequences can be defined here: http://molleindustria.github.io/p5.play/docs/classes/Sprite.html#method-addAnimation
+		// TODO - might be better to just resize the actual images to desired size once we finalize the assets
+		this.sprite.scale = 0.5;
 	}
 }
 
@@ -147,9 +154,11 @@ class Player {
 	constructor() {
 		this._lane = 0;
 		this.sprite = (createSprite(millisToXCoordinate(millis()), laneToYCoordinate(this._lane)));
-		this.sprite.addImage(playerImage); 
-		this.sprite.scale = 0.7; // reyhan - rescaled sprite
-		// @Reyhan - animation sequences can be defined here: http://molleindustria.github.io/p5.play/docs/classes/Sprite.html#method-addAnimation
+		this.sprite.addImage('normal', playerImage);
+		this.sprite.addAnimation('inhale', playerInhaleAnimation);
+
+		// TODO - might be better to just resize the actual image to desired size once we finalize the assets
+		this.sprite.scale = 0.7;
 	}
 
 	get lane() {
