@@ -48,6 +48,7 @@ let playerInhaleAnimation;
 let player;
 
 let experiencePointsBar;
+let levelUpAnimation;
 
 let backgroundImage; // reyhan
 
@@ -59,6 +60,13 @@ function preload() {
 
 	playerImage = loadImage('./assets/player_normal.png');
 	playerInhaleAnimation = loadAnimation('./assets/player-inhale-0.png', './assets/player-inhale-1.png', './assets/player-inhale-2.png', './assets/player-inhale-3.png');
+
+	// TODO: I think might be a little bit hacky...
+	// To make this animation appear only at specific times, I've put a completely empty png as the first and last frame of the animation. Whenever I want it to play, I simply rewind and play.
+	// While animations do have a `visible` property, using this would be a little more complicated because I'd somehow have to asychronously turn off visibility after the animation finishes...
+	levelUpAnimation = loadAnimation('./assets/empty.png', './assets/level-up-0.png','./assets/level-up-1.png','./assets/level-up-2.png','./assets/level-up-3.png', './assets/empty.png');
+	levelUpAnimation.looping = false;
+	levelUpAnimation.goToFrame(levelUpAnimation.getLastFrame());
 
 	backgroundImage = loadImage('./assets/background.png'); // reyhan
 
@@ -132,6 +140,7 @@ function draw() {
 	// This allows score to be drawn relative to current `viewport`, as opposed to the scene
 	camera.off();
 	experiencePointsBar.draw();
+	levelUpAnimation.draw(150, 50);
 
 	if (millis() > levelDurationMillis) {
 		drawEndCard();
@@ -146,6 +155,8 @@ function addScore(n) {
 
 function checkForLevelUp() {
 	if (player.stats.experiencePoints >= player.stats.level.endExp) {
+		levelUpAnimation.rewind();
+		levelUpAnimation.play();
 		let nextLevel = unlockables.find(element => element.level == player.stats.level.level + 1);
 		player.stats.level = nextLevel;
 		player.stats.colors.push(nextLevel.color);
