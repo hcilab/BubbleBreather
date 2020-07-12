@@ -40,12 +40,21 @@ let collectablesTable;
 let collectables;
 
 let playerImage;
+let playerImageInhale; // reyhan
 let player;
+
+let backgroundImage; // reyhan
+let x1 = 0; // reyhan
+let x2; // reyhan
+
+let scrollSpeed = 1; // reyhan
 
 
 function preload() {
 	collectableImage = loadImage('./assets/collectable.png');
-	playerImage = loadImage('./assets/player.png');
+	playerImage = loadImage('./assets/player_normal.png');
+	playerImageInhale = loadImage('./assets/player_inhale.png'); // reyhan
+	backgroundImage = loadImage('./assets/background.png'); // reyhan
 
 	// Note that `loadTable()` is asynchronous, so we have to divide level loading across preload() and setup() functions :(
 	collectablesTable = loadTable('./assets/level-1.csv', 'csv', 'header');
@@ -54,19 +63,35 @@ function preload() {
 
 function setup() {
 	createCanvas(windowWidth, 600);
-	background(128);
+	// background(128); // original
 	collectables = collectablesTable.getRows().map(r => new Collectable(r.getNum('ms'), r.getNum('lane'), r.getString('group')));
 	player = new Player();
+	x2 = width; // reyhan
 }
 
 
 function draw() {
 	clear();
-	background(128);
+	// background(128); // original
+
+	// continous scrolling background, still buggy: does not repeat the background image
+	image(backgroundImage, x1, 0, width, height); // reyhan
+	image(backgroundImage, x2, 0, width, height); // reyhan
+
+	x1 -= scrollSpeed; // reyhan
+	x2 -= scrollSpeed; // reyhan
+
+	if (x1 < -width) { // reyhan
+		x1 = width;
+	}
+	if (x2 < -width) { // reyhan
+		x2 = width;
+	}
 
 	// Player moves at a uniform horizontal speed across the level with scrolling camera
 	player.sprite.position.x = millisToXCoordinate(millis());
 	camera.position.x = player.sprite.position.x + 0.4*width;
+
 
 	// Test for collisions with collectables
 	// Note that sprite and collectable must be removed separately (p5.game maintains an internal list of sprites)
@@ -102,13 +127,15 @@ function keyPressed() {
 	switch (key) {
 		case 'w':
 			player.lane = Math.min(player.lane + 1, 4);
+			player.sprite.addImage(playerImageInhale); // reyhan - inhale sprite
 			// @Reyhan - animation sequences can be fired here: http://molleindustria.github.io/p5.play/docs/classes/Sprite.html#method-changeAnimation
 			// You may even want to "jump" play the animation for a set amount of time, then switch back to regular one using a timeout:
-			// 		player.setAnimation('jump');
-			//		setTimeout(() => player.setAnimation('normal'), 1000);
+					// player.setAnimation('jump');
+					// setTimeout(() => player.setAnimation('normal'), 1000);
 			break;
 		case 's':
 			player.lane = 0;
+			player.sprite.addImage(playerImage); // reyhan - exhale sprite
 			// @Reyhan - similar idea here... maybe we want some kind of ground-pound animation when they exhale or something...
 			break;
 	}
@@ -124,6 +151,8 @@ class Collectable {
 
 		this.sprite = createSprite(millisToXCoordinate(this.ms), laneToYCoordinate(this.lane));
 		this.sprite.addImage(collectableImage);
+		this.sprite.scale = 0.5; // reyhan - rescaled sprite
+
 		// @Reyhan - animation sequences can be defined here: http://molleindustria.github.io/p5.play/docs/classes/Sprite.html#method-addAnimation
 	}
 }
@@ -133,7 +162,8 @@ class Player {
 	constructor() {
 		this._lane = 0;
 		this.sprite = (createSprite(millisToXCoordinate(millis()), laneToYCoordinate(this._lane)));
-		this.sprite.addImage(playerImage);
+		this.sprite.addImage(playerImage); 
+		this.sprite.scale = 0.7; // reyhan - rescaled sprite
 		// @Reyhan - animation sequences can be defined here: http://molleindustria.github.io/p5.play/docs/classes/Sprite.html#method-addAnimation
 	}
 
@@ -144,6 +174,7 @@ class Player {
 	set lane(lane) {
 		this._lane = lane;
 		this.sprite.position.y = laneToYCoordinate(this._lane);
-		this.sprite.scale = 1.0 + (this._lane * 0.2);
+		// this.sprite.scale = 1.0 + (this._lane * 0.2); // original
+		this.sprite.scale = 0.7 + (this._lane * 0.1); // reyhan - rescaled sprite
 	}
 }
