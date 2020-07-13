@@ -44,6 +44,10 @@ let collectableAnimation;
 let collectablesTable;
 let collectables;
 
+// Maintain a tally of the remaining collectables in each group, so that we can provide a bonus when all collectables from one group are collected (i.e., when one of the tallys reaches 0)
+let stackGroupCounts;
+let stackBonusAnimation;
+
 let playerImage;
 let playerInhaleAnimation;
 let player;
@@ -69,6 +73,10 @@ function preload() {
 	levelUpAnimation.looping = false;
 	levelUpAnimation.goToFrame(levelUpAnimation.getLastFrame());
 
+	stackBonusAnimation = loadAnimation('./assets/empty.png', './assets/inhale-bonus-0.png','./assets/inhale-bonus-1.png','./assets/inhale-bonus-2.png','./assets/inhale-bonus-3.png', './assets/empty.png');
+	stackBonusAnimation.looping = false;
+	stackBonusAnimation.goToFrame(stackBonusAnimation.getLastFrame());
+
 	backgroundImage = loadImage('./assets/background.png'); // reyhan
 
 	// Note that `loadTable()` is asynchronous, so we have to divide level loading across preload() and setup() functions :(
@@ -87,6 +95,18 @@ function setup() {
 	playerInhaleAnimation.looping = false;
 
 	collectables = collectablesTable.getRows().map(r => new Collectable(r.getNum('ms'), r.getNum('lane'), r.getString('group')));
+
+	stackGroupCounts = new Map();
+	collectables.forEach(collectable => {
+		let group = collectable.group;
+		if (group != '') {
+			if (!stackGroupCounts.has(group)) {
+				stackGroupCounts.set(group, 0);
+			}
+			stackGroupCounts.set(group, stackGroupCounts.get(group) + 1);
+		}
+	});
+
 	unlockables = unlockablesTable.getRows().map(function(r) {
 		return {
 			level: r.getNum('level'),
@@ -124,6 +144,7 @@ function draw() {
 			if (collectable.sprite.overlap(player.sprite)) {
 				addScore(100);
 				checkForLevelUp();
+				checkForStackBonus(collectable);
 				collectable.sprite.remove();
 				array.splice(index, 1);
 			}
@@ -141,6 +162,7 @@ function draw() {
 	camera.off();
 	experiencePointsBar.draw();
 	levelUpAnimation.draw(150, 50);
+	stackBonusAnimation.draw(width/2, height/2);
 
 	if (levelStartMillis == -1) {
 		drawTitleCard();
@@ -166,6 +188,21 @@ function checkForLevelUp() {
 		player.stats.colors.push(nextLevel.color);
 		player.save();
 		experiencePointsBar.configureForPlayer(player);
+	}
+}
+
+function checkForStackBonus(collectable) {
+	let group = collectable.group;
+	if (group == '') {
+		return;
+	}
+
+	stackGroupCounts.set(group, stackGroupCounts.get(group) - 1);
+	if (stackGroupCounts.get(group) <= 0) {
+		addScore(1000);
+		stackBonusAnimation.rewind();
+		stackBonusAnimation.play();
+		stackGroupCounts.delete(group);
 	}
 }
 
