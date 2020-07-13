@@ -22,7 +22,7 @@ function laneToYCoordinate(lane) {
 
 // Similarly, input coordinates are specified as time offsets (ms), making it easier to design levels that align with breath stacking timing requiremets (e.g., hold for 2 seconds...)
 // These parameters can be tweaked to adjust the speed of the game
-let levelDurationMillis = 120000;
+let levelDurationMillis = 105000;
 let levelStartMillis = -1;
 let sceneWidth = 12000;
 function millisToXCoordinate(ms) {
