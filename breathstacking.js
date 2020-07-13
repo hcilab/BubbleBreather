@@ -94,6 +94,9 @@ function setup() {
 	playerInhaleAnimation.frameDelay = 4;
 	playerInhaleAnimation.looping = false;
 
+	stackBonusAnimation.frameDelay = 8;
+	levelUpAnimation.frameDelay = 8;
+
 	collectables = collectablesTable.getRows().map(r => new Collectable(r.getNum('ms'), r.getNum('lane'), r.getString('group')));
 
 	stackGroupCounts = new Map();
