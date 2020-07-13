@@ -6,6 +6,8 @@ class Painting {
   constructor(paintingID, bubbles=[]) {
     this.paintingID = paintingID;
     this.bubbles = bubbles;
+    this.exhaleTime = 0;
+    this.exhaleCount = 0;
 
     // The period of time between blown bubbles
     this.bubbleDelayMillis = 25;
@@ -14,9 +16,11 @@ class Painting {
 
   addBubbleGroup(c) {
     this.bubbles.push(new Bubbles(c));
+    this.exhaleCount += 1;
   }
 
   blow(x, y, dt, heading=p5.Vector.random2D().div(250)) {
+    this.exhaleTime += dt;
     if (this.bubbles.length > 0) {
       this.bubbleDelayTimer += dt;
       if (this.bubbleDelayTimer > this.bubbleDelayMillis) {
@@ -63,13 +67,18 @@ class Painting {
   toJSON() {
     return {
       'paintingID': this.paintingID,
+      'exhaleTime': this.exhaleTime,
+      'exhaleCount': this.exhaleCount,
       'bubbles': this.bubbles.map(bs => bs.toJSON()),
     };
   }
 
   static fromJSON(json) {
     let bubbles = json.bubbles.map(bs => Bubbles.fromJSON(bs));
-    return new Painting(json.paintingID, bubbles);
+    let painting = new Painting(json.paintingID, bubbles);
+    painting.exhaleTime = json.exhaleTime;
+    painting.exhaleCount = json.exhaleCount;
+    return painting;
   }
 }
 

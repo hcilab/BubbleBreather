@@ -22,5 +22,7 @@ function setup() {
   // Otherwise draw painting
   painting.draw();
 
-  //TODO: Draw summary metrics...
+  textSize(12);
+  textStyle(BOLD);
+  text(painting.exhaleCount + ' Exhales' + ' (' + nf(painting.exhaleTime / 1000, -1, 1) + 'sec)', 5, 15);
 }
