@@ -242,7 +242,8 @@ class Collectable {
 		this.sprite.addAnimation('bubble', collectableAnimation);
 
 		// TODO - might be better to just resize the actual images to desired size once we finalize the assets
-		this.sprite.scale = 0.5;
+		let scalingFactor = this.group == '' ? 0.4 : 0.7;
+		this.sprite.scale = scalingFactor;
 	}
 }
 
