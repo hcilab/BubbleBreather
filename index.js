@@ -14,7 +14,7 @@ function populatePlayerStats() {
 }
 
 function populateSavedPaintings() {
-	let paintingList = select('#savedpaintings');
+	let paintingList = select('.thumbmenu');
 	let savedPaintings = getItem('savedPaintings');
 
 	if (paintingList == null || savedPaintings == null) {
@@ -22,12 +22,11 @@ function populateSavedPaintings() {
 	}
 
 	JSON.parse(savedPaintings).forEach((paintingID, index) => {
-		let url = './pep.html?paintingid=' + paintingID;
-		let linkText = (index+1) + ': ' + paintingID;
-		let a = createA(url, linkText);
+		let url = './thumbnail.html?paintingid=' + paintingID;
+		let thumb = createElement('iframe');
+        thumb.setAttribute("src",url);
+        thumb.setAttribute("class","thumbFrame");
 
-		let li = createElement('li');
-		li.child(a);
-		paintingList.child(li);
+		paintingList.child(thumb);
 	});
 }
