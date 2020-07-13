@@ -7,9 +7,6 @@ let painting;
 let bubbleWand;
 let nextColor;
 
-// The period of time between blown bubbles
-let bubbleDelayMillis = 25;
-let bubbleDelayTimer = 0;
 
 async function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -43,20 +40,16 @@ function draw() {
     bubbleWand.absorb(deltaTime);
   } else if (mouseIsPressed && painting.bubbles.length > 0) {
     bubbleWand.emit(deltaTime);
-    bubbleDelayTimer += deltaTime;
-    if (bubbleDelayTimer > bubbleDelayMillis) {
-      let heading = createVector((mouseX-pmouseX)/width, (mouseY-pmouseY)/height).div(5);
-      if (heading.mag() > 0.001) {
-        painting.bubbles[painting.bubbles.length-1].addBubble(mouseX/width, mouseY/height, heading);
-      } else {
-        painting.bubbles[painting.bubbles.length-1].addBubble(mouseX/width, mouseY/height);
-      }
-      bubbleDelayTimer -= bubbleDelayMillis;
+    let heading = createVector((mouseX-pmouseX)/width, (mouseY-pmouseY)/height).div(5);
+    if (heading.mag() > 0.001) {
+      painting.blow(mouseX/width, mouseY/height, deltaTime, heading);
+    } else {
+      painting.blow(mouseX/width, mouseY/height, deltaTime);
     }
   }
 
-  painting.bubbles.forEach(s => s.animate(deltaTime));
-  painting.bubbles.forEach(s => s.draw());
+  painting.update(deltaTime);
+  painting.draw();
 
   push();
   stroke(0);
@@ -77,7 +70,7 @@ function windowResized() {
 
 function mousePressed() {
   if (mouseY < 0.9 * height) {
-    painting.bubbles.push(new Bubbles(nextColor));
+    painting.addBubbleGroup(nextColor);
   }
 }
 

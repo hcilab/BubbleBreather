@@ -6,6 +6,32 @@ class Painting {
   constructor(paintingID, bubbles=[]) {
     this.paintingID = paintingID;
     this.bubbles = bubbles;
+
+    // The period of time between blown bubbles
+    this.bubbleDelayMillis = 25;
+    this.bubbleDelayTimer = 0;
+  }
+
+  addBubbleGroup(c) {
+    this.bubbles.push(new Bubbles(c));
+  }
+
+  blow(x, y, dt, heading=p5.Vector.random2D().div(250)) {
+    if (this.bubbles.length > 0) {
+      this.bubbleDelayTimer += dt;
+      if (this.bubbleDelayTimer > this.bubbleDelayMillis) {
+        this.bubbles[this.bubbles.length-1].addBubble(x, y, heading);
+        this.bubbleDelayTimer -= this.bubbleDelayMillis;
+      }
+    }
+  }
+
+  update(dt) {
+    this.bubbles.forEach(bs => bs.animate(dt));
+  }
+
+  draw() {
+    this.bubbles.forEach(bs => bs.draw());
   }
 
   static create() {

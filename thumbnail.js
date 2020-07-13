@@ -20,7 +20,7 @@ function setup() {
   }
 
   // Otherwise draw painting
-  painting.bubbles.forEach(s => s.draw());
+  painting.draw();
 
   //TODO: Draw summary metrics...
 }
