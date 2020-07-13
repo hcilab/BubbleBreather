@@ -57,6 +57,11 @@ let levelUpAnimation;
 
 let backgroundImage; // reyhan
 
+// Maintain some simple statistics about the players performance in this session
+// (Note that similar "all time" statistics are logged in the player.stats object)
+let sessionInhaleCount = 0;
+let sessionStackCount = 0;
+
 
 function preload() {
 	// @Reyhan - I've quickly made these assets as placeholders for now, but note that animations can be adjusted by editing the files specified in `loadAnimation()` below.
@@ -202,6 +207,8 @@ function checkForStackBonus(collectable) {
 
 	stackGroupCounts.set(group, stackGroupCounts.get(group) - 1);
 	if (stackGroupCounts.get(group) <= 0) {
+		sessionStackCount += 1;
+		player.stats.stackCount += 1;
 		addScore(1000);
 		stackBonusAnimation.rewind();
 		stackBonusAnimation.play();
@@ -247,7 +254,8 @@ function drawEndCard() {
 	text('Great Work!', width/2, height/2);
 
 	textSize(24);
-	text('Summary metrics here...', width/2, (height/2) + 100);
+	text('   Today: ' + sessionInhaleCount + " Inhales & " + sessionStackCount + " Breath Stacks!", width/2, (height/2) + 100);
+	text('All Time: ' + player.stats.inhaleCount + " Inhales & " + player.stats.stackCount + " Breath Stacks!", width/2, (height/2) + 150);
 
 	pop();
 }
@@ -256,6 +264,8 @@ function drawEndCard() {
 function keyPressed() {
 	switch (key) {
 		case 'w':
+			sessionInhaleCount += 1;
+			player.stats.inhaleCount += 1;
 			player.lane = Math.min(player.lane + 1, 4);
 			player.sprite.changeAnimation('inhale');
 			setTimeout(function() { player.sprite.changeAnimation('normal') }.bind(this), 500);
@@ -305,6 +315,8 @@ class Player {
 		if (this.stats == null) {
 			this.stats = {
 				experiencePoints: 0,
+				inhaleCount: 0,
+				stackCount: 0,
 				level: unlockables.find(element => element.level == 1),
 				colors: [unlockables.find(element => element.level == 1).color],
 			};
