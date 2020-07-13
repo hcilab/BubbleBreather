@@ -4,10 +4,10 @@ body {
 }
 .thumbFrame {
     overflow: hidden;
-    border: 0;
+    border: thin solid gray;
     margin: 1;
-    height: 100px;
-    width: 200px;
+    height: 250px;
+    width: 250px;
 }
 div.thumbMenu{
     overflow: auto;
