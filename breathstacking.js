@@ -15,7 +15,7 @@
 
 
 // The level input file specifies y-positions in `lane` units (0 -> no stack; [1-4] -> stacked breaths)
-let laneCoordinates = [500, 400, 300, 200, 100];
+let laneCoordinates;
 function laneToYCoordinate(lane) {
 	return laneCoordinates[lane];
 }
@@ -100,7 +100,10 @@ async function preload() {
 
 
 function setup() {
-	createCanvas(windowWidth, 600);
+	createCanvas(windowWidth, windowHeight);
+
+	laneCoordinates = [0.9*height, 0.7*height, 0.5*height, 0.3*height, 0.1*height];
+
 
 	// TODO: This binds the animation speed to the framerate of the game... is this how it's normally done, or is there a way to specify animation time in ms?
 	collectableAnimation.frameDelay = 30;
@@ -285,9 +288,9 @@ class Collectable {
 		this.sprite = createSprite(millisToXCoordinate(this.ms), laneToYCoordinate(this.lane));
 		this.sprite.addAnimation('bubble', collectableAnimation);
 
-		// TODO - might be better to just resize the actual images to desired size once we finalize the assets
-		let scalingFactor = this.group == '' ? 0.4 : 0.7;
-		this.sprite.scale = scalingFactor;
+		if (this.group == '') {
+			this.sprite.scale = 0.7;
+		}
 	}
 }
 
@@ -301,9 +304,7 @@ class Player {
 		this.sprite = (createSprite(millisToXCoordinate(millis()), laneToYCoordinate(this._lane)));
 		this.sprite.addImage('normal', playerImage);
 		this.sprite.addAnimation('inhale', playerInhaleAnimation);
-
-		// TODO - might be better to just resize the actual image to desired size once we finalize the assets
-		this.sprite.scale = 0.7;
+		this.sprite.scale = 1.5;
 	}
 
 	_loadStats() {
@@ -354,7 +355,7 @@ class Player {
 		this._lane = Math.min(this.lane, laneCoordinates.length - 1);
 
 		this.sprite.position.y = laneToYCoordinate(this._lane);
-		this.sprite.scale = 0.7 + (this._lane * 0.1); // reyhan - rescaled sprite
+		this.sprite.scale = 1.5 + (this._lane * 0.2); // reyhan - rescaled sprite
 	}
 }
 
