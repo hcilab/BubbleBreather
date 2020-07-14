@@ -60,9 +60,7 @@ function parsePlayerStats(statsJSON)
 
 function populateColors()
 {
-    for (let j = 0; j < 10; j++){//unlockablesTable.getRowCount(); row++){
-        let r = unlockablesTable.rows[j];
-
+    unlockablesTable.getRows().forEach(r => {
         let color =  {
                 level: r.getNum('level'),
                 startExp: r.getNum('startExp'),
@@ -73,7 +71,7 @@ function populateColors()
                 }
             }
         addColorCollectable(color);
-    }
+    });
 }
 
 function addColorCollectable(collectable)
