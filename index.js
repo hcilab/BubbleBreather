@@ -1,7 +1,14 @@
+let unlockablesTable;
+
+function preload()
+{
+	unlockablesTable = loadTable('./assets/unlockables.csv', 'csv', 'header'); 
+}
 function setup() {
 	noCanvas();
 	populatePlayerStats();
 	populateSavedPaintings();
+    populateColors();
 }
 
 function populatePlayerStats() {
@@ -22,12 +29,22 @@ function populateSavedPaintings() {
 	}
 
 	JSON.parse(savedPaintings).forEach((paintingID, index) => {
+        let paintingLink = document.createElement('a');
+        paintingLink.setAttribute("href","./pep.html?paintingid="+paintingID);
+        paintingLink.setAttribute("class","linkwrap");
+
+        let iframeBlocker = document.createElement('div');
+        iframeBlocker.setAttribute("class","blocker");
+
+        paintingLink.appendChild(iframeBlocker);
+
 		let url = './thumbnail.html?paintingid=' + paintingID;
 		let thumb = document.createElement('iframe');
         thumb.setAttribute("src",url);
         thumb.setAttribute("class","thumbFrame");
 
-		paintingList.child(thumb);
+        paintingLink.appendChild(thumb);
+		paintingList.child(paintingLink);
 	});
 }
 
@@ -39,4 +56,47 @@ function parsePlayerStats(statsJSON)
     
     statsDiv.append(xpHead);
     return statsDiv.outerHTML;
+}
+
+function populateColors()
+{
+    for (let j = 0; j < 10; j++){//unlockablesTable.getRowCount(); row++){
+        let r = unlockablesTable.rows[j];
+
+        let color =  {
+                level: r.getNum('level'),
+                startExp: r.getNum('startExp'),
+                endExp: r.getNum('endExp'),
+                color: {
+                    name: r.getString('name'),
+                    rgb: r.getString('rgb')
+                }
+            }
+        addColorCollectable(color);
+    }
+}
+
+function addColorCollectable(collectable)
+{
+    let colorContainer = document.createElement('div');
+    colorContainer.setAttribute('class','colorContainer');
+    let color = document.createElement('div');
+    color.setAttribute('class','colorCollectable');
+    color.setAttribute('style','background: '+collectable.color.rgb);
+    colorContainer.appendChild(color);
+
+    let breakTag1 = document.createElement('br');
+    colorContainer.appendChild(breakTag1);
+
+    let colorText = document.createTextNode(collectable.color.name);
+    colorContainer.appendChild(colorText);
+
+    let breakTag2 = document.createElement('br');
+    colorContainer.appendChild(breakTag2);
+
+    let xpText = document.createTextNode(collectable.startExp + " points");
+    colorContainer.appendChild(xpText);
+
+	let colorMenu = select('.colorMenu');
+    colorMenu.child(colorContainer);
 }
