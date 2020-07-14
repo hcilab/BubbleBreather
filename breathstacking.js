@@ -253,15 +253,15 @@ function drawEndCard() {
 	stroke(255);
 	strokeWeight(1);
 	fill(255)
-	text('Great Work!', width/2, height/2);
+	text('Great Work!', width/2, height/3);
 
 	textSize(24);
-	text('   Today: ' + sessionInhaleCount + " Inhales & " + sessionStackCount + " Breath Stacks!", width/2, (height/2) + 100);
-	text('All Time: ' + player.stats.inhaleCount + " Inhales & " + player.stats.stackCount + " Breath Stacks!", width/2, (height/2) + 150);
+	text('   Today: ' + sessionInhaleCount + " Inhales & " + sessionStackCount + " Breath Stacks!", width/2, (height/3) + 100);
+	text('All Time: ' + player.stats.inhaleCount + " Inhales & " + player.stats.stackCount + " Breath Stacks!", width/2, (height/3) + 150);
 
 	if (sessionLevelUpCount > 0) {
 		textStyle(BOLD);
-		text("You've unlocked " + sessionLevelUpCount + " new colors! Awesome!", width/2, (height/2) + 200);
+		text("You've unlocked " + sessionLevelUpCount + " new colors! Awesome!", width/2, (height/3) + 200);
 	}
 
 	pop();
