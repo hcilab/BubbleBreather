@@ -19,7 +19,7 @@ function populatePlayerStats() {
     let stackedBreathingCount = select ('#stackedBreathingCount');
 
     if (playerStats) {
-        playerLevel.html('Level: ' + playerStats.level.level);
+        playerLevel.html('Level ' + playerStats.level.level);
         experiencePoints.html(playerStats.experiencePoints + ' exp.');
         stackedBreathingCount.html(playerStats.stackCount + ' stacks');
     }

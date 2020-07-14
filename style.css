@@ -74,9 +74,10 @@ p {
 .today {
   font-style: normal;
   font-weight: normal;
-  font-size: 24px;
+  font-size: 18px;
   line-height: 40px;
   margin-top: 35px;
+  color: #979797;
 }
 
 .excerciseName {
@@ -114,7 +115,7 @@ p {
 }
 
 .gameLinkContainer {
-  margin-top: 74px;
+  margin-top: 42px;
   height: 169px;
   width: 100%;
   display: flex;
@@ -146,6 +147,17 @@ p {
   align-self: flex-end;
 }
 
+.helpButton {
+ margin-top: 30px; 
+}
+
+.helpLeft {
+
+}
+
+.helpRight {
+
+}
 .right {
   width: 578px;
   height: 100%;
