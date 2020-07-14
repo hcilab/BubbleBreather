@@ -350,6 +350,9 @@ class Player {
 
 	set lane(lane) {
 		this._lane = lane;
+		this._lane = Math.max(0, this._lane);
+		this._lane = Math.min(this.lane, laneCoordinates.length - 1);
+
 		this.sprite.position.y = laneToYCoordinate(this._lane);
 		this.sprite.scale = 0.7 + (this._lane * 0.1); // reyhan - rescaled sprite
 	}
