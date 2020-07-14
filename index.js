@@ -26,41 +26,36 @@ function populatePlayerStats() {
 }
 
 function populateSavedPaintings() {
-	let paintingList = select('.thumbmenu');
+	let gallary = select('#paintingGallary');
+    let firstPaintingDiv = select('#paintingFirst');
+    let remainingPaintingsContainer = select('#remainingPaintings');
+
 	let savedPaintings = getItem('savedPaintings');
+    if (savedPaintings != null) {
+        JSON.parse(savedPaintings).forEach((paintingID, index) => {
+            let paintingLink = document.createElement('a');
+            paintingLink.setAttribute("href","./pep.html?paintingid="+paintingID);
+            paintingLink.setAttribute("class","linkwrap");
 
-	if (paintingList == null || savedPaintings == null) {
-		return;
-	}
+            let iframeBlocker = document.createElement('div');
+            iframeBlocker.setAttribute("class","blocker");
 
-	JSON.parse(savedPaintings).forEach((paintingID, index) => {
-        let paintingLink = document.createElement('a');
-        paintingLink.setAttribute("href","./pep.html?paintingid="+paintingID);
-        paintingLink.setAttribute("class","linkwrap");
+            paintingLink.appendChild(iframeBlocker);
 
-        let iframeBlocker = document.createElement('div');
-        iframeBlocker.setAttribute("class","blocker");
+    		let url = './thumbnail.html?paintingid=' + paintingID;
+    		let thumb = document.createElement('iframe');
+            thumb.setAttribute("src",url);
+            thumb.setAttribute("class","thumbFrame");
 
-        paintingLink.appendChild(iframeBlocker);
+            paintingLink.appendChild(thumb);
 
-		let url = './thumbnail.html?paintingid=' + paintingID;
-		let thumb = document.createElement('iframe');
-        thumb.setAttribute("src",url);
-        thumb.setAttribute("class","thumbFrame");
-
-        paintingLink.appendChild(thumb);
-		paintingList.child(paintingLink);
-	});
-}
-
-function parsePlayerStats(statsJSON)
-{
-    let statsDiv = document.createElement('div');
-    let xpHead = document.createElement('h3');
-    xpHead.innerText = "Experience: " + statsJSON.experiencePoints + " points";
-    
-    statsDiv.append(xpHead);
-    return statsDiv.outerHTML;
+            if (index == 0) {
+                firstPaintingDiv.child(paintingLink);
+            } else {
+                remainingPaintingsContainer.child(paintingLink);
+            }
+    	});
+    }
 }
 
 function populateColors()

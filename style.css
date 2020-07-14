@@ -186,7 +186,6 @@ p {
 }
 
 .paintingFirst {
-  background: #f7f7f7;
   border-radius: 10px;
   width: 199px;
   height: 222px;
@@ -194,7 +193,6 @@ p {
 }
 
 .painting {
-  background: #f7f7f7;
   border-radius: 10px;
   width: 267px;
   height: 100%;
@@ -301,11 +299,9 @@ p {
 }
 
 .thumbFrame {
-  overflow: hidden;
-  border: thin solid gray;
-  margin: 1;
-  height: 250px;
-  width: 250px;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
 }
 div.thumbMenu {
   overflow: auto;
