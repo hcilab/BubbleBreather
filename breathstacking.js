@@ -245,7 +245,7 @@ function drawTitleCard() {
 
 	textAlign(LEFT, TOP);
 	textSize(24);
-	text('Bubbles jumps whenever you stack your breath - Collect the bubbles by stacking your breaths at the right time!\n\nPress Spacebar to start...', width/3, (height/3) + 50, width/3);
+	text('Bubbles jumps whenever you stack your breath - Collect the bubbles by stacking your breaths at the right time!\n\nPress Enter to start...', width/3, (height/3) + 50, width/3);
 
 	pop();
 }
@@ -279,11 +279,12 @@ function drawEndCard() {
 
 // Stubbed keyboard controls for now...
 function keyPressed() {
-	switch (key) {
-		case 'w':
+	switch (keyCode) {
+		case UP_ARROW:
 			player.jump();
 			break;
-		case ' ':
+		case ENTER:
+		case RETURN:
 			levelStartMillis = millis();
 			break;
 	}
