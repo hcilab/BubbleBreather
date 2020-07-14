@@ -22,7 +22,7 @@ function laneToYCoordinate(lane) {
 
 // Similarly, input coordinates are specified as time offsets (ms), making it easier to design levels that align with breath stacking timing requiremets (e.g., hold for 2 seconds...)
 // These parameters can be tweaked to adjust the speed of the game
-let levelDurationMillis = 105000;
+let levelDurationMillis = 100000;
 let levelRunningTime = 0;
 let sceneWidth = 12000;
 function millisToXCoordinate(ms) {
@@ -158,7 +158,7 @@ function draw() {
 
 	// A naive implementation of a continuous background with panning camera is to simply repeat the background image across the entire scene.
 	// TODO: Only draw the visible images in each frame if this causes a performance hit.
-	for (let x=-backgroundImage.width; x<sceneWidth; x+= backgroundImage.width) {
+	for (let x=-backgroundImage.width; x<sceneWidth + backgroundImage.width; x+= backgroundImage.width) {
 		image(backgroundImage, x, 0, backgroundImage.width, height);
 	}
 
