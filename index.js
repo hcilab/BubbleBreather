@@ -14,11 +14,15 @@ function setup() {
 }
 
 function populatePlayerStats() {
-	let p = select('#playerStatsP');
-	if (p != null) {
-		let content = playerStats == null ? "You haven't collected any bubbles yet!" : parsePlayerStats(playerStats);
-		p.html(content);
-	}
+	let playerLevel = select('#playerLevel');
+    let experiencePoints = select('#experiencePoints');
+    let stackedBreathingCount = select ('#stackedBreathingCount');
+
+    if (playerStats) {
+        playerLevel.html('Level: ' + playerStats.level.level);
+        experiencePoints.html(playerStats.experiencePoints + ' exp.');
+        stackedBreathingCount.html(playerStats.stackCount + ' stacks');
+    }
 }
 
 function populateSavedPaintings() {
@@ -61,45 +65,10 @@ function parsePlayerStats(statsJSON)
 
 function populateColors()
 {
-    unlockablesTable.getRows().forEach(r => {
-        let color =  {
-                level: r.getNum('level'),
-                startExp: r.getNum('startExp'),
-                endExp: r.getNum('endExp'),
-                color: {
-                    name: r.getString('name'),
-                    rgb: r.getString('rgb')
-                }
-            }
-        addColorCollectable(color);
-    });
-}
-
-function addColorCollectable(collectable)
-{
-    let colorContainer = document.createElement('div');
-    colorContainer.setAttribute('class','colorContainer');
-    let color = document.createElement('div');
-    color.setAttribute('class','colorCollectable');
-    if (playerStats == null || playerStats.level.level < collectable.level) {
-        color.setAttribute('style','background: rgb(128, 128, 128)');
-    } else {
-        color.setAttribute('style','background: ' + collectable.color.rgb);
+    if (playerStats) {
+        let paintBubbles = selectAll('.paintBubble');
+        playerStats.colors.forEach((c, index) => {
+            paintBubbles[index].style('fill', c.rgb);
+        });
     }
-    colorContainer.appendChild(color);
-
-    let breakTag1 = document.createElement('br');
-    colorContainer.appendChild(breakTag1);
-
-    let colorText = document.createTextNode(collectable.color.name);
-    colorContainer.appendChild(colorText);
-
-    let breakTag2 = document.createElement('br');
-    colorContainer.appendChild(breakTag2);
-
-    let xpText = document.createTextNode(collectable.startExp + " points");
-    colorContainer.appendChild(xpText);
-
-	let colorMenu = select('.colorMenu');
-    colorMenu.child(colorContainer);
 }

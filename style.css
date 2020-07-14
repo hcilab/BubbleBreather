@@ -233,52 +233,8 @@ p {
   grid-column-gap: 17px;
 }
 
-.paint {
-  height: 51px;
-}
-
 .paint svg {
   height: 51px;
-}
-
-.paint:nth-child(1) path:first-child {
-  fill: #d8e0bb;
-}
-
-.paint:nth-child(2) path:first-child {
-  fill: #b6cec7;
-}
-
-.paint:nth-child(3) path:first-child {
-  fill: #86a3c3;
-}
-
-.paint:nth-child(4) path:first-child {
-  fill: #ffd083;
-}
-
-.paint:nth-child(5) path:first-child {
-  fill: #c86218;
-}
-
-.paint:nth-child(6) path:first-child {
-  fill: #d63118;
-}
-
-.paint:nth-child(7) path:first-child {
-  fill: #d63118;
-}
-
-.paint:nth-child(8) path:first-child {
-  fill: #1d3557;
-}
-
-.paint:nth-child(9) path:first-child {
-  fill: #a8dadc;
-}
-
-.paint:nth-child(10) path:first-child {
-  fill: #f1faee;
 }
 
 .App-logo {
