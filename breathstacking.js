@@ -56,6 +56,7 @@ let experiencePointsBar;
 let levelUpAnimation;
 
 let backgroundImage; // reyhan
+let titleCard;
 
 // Maintain some simple statistics about the players performance in this session
 // (Note that similar "all time" statistics are logged in the player.stats object)
@@ -86,6 +87,7 @@ async function preload() {
 	stackBonusAnimation.goToFrame(stackBonusAnimation.getLastFrame());
 
 	backgroundImage = loadImage('./assets/background.png'); // reyhan
+	titleCard = loadImage('./assets/placeholder.png');
 
 	// Note that `loadTable()` is asynchronous, so we have to divide level loading across preload() and setup() functions :(
 	collectablesTable = loadTable('./assets/level-1.csv', 'csv', 'header');
@@ -184,7 +186,7 @@ function draw() {
 	stackBonusAnimation.draw(width/2, height/2);
 
 	if (levelStartMillis == -1) {
-		drawTitleCard();
+		image(titleCard, 0, 0, width, height);
 	}
 
 	if (millis()-levelStartMillis > levelDurationMillis) {
@@ -226,28 +228,6 @@ function checkForStackBonus(collectable) {
 		stackBonusAnimation.play();
 		stackGroupCounts.delete(group);
 	}
-}
-
-function drawTitleCard() {
-	push();
-
-	rectMode(CORNER);
-	noStroke();
-	fill(color(0, 0, 0, 200));
-	rect(0, 0, width, height);
-
-	textAlign(CENTER, CENTER);
-	textSize(50);
-	stroke(255);
-	strokeWeight(1);
-	fill(255)
-	text('-- Bubble Breather --', width/2, height/3);
-
-	textAlign(LEFT, TOP);
-	textSize(24);
-	text('Bubbles jumps whenever you stack your breath - Collect the bubbles by stacking your breaths at the right time!\n\nPress Enter to start...', width/3, (height/3) + 50, width/3);
-
-	pop();
 }
 
 function drawEndCard() {
