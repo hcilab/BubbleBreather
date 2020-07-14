@@ -81,7 +81,11 @@ function addColorCollectable(collectable)
     colorContainer.setAttribute('class','colorContainer');
     let color = document.createElement('div');
     color.setAttribute('class','colorCollectable');
-    color.setAttribute('style','background: '+collectable.color.rgb);
+    if (playerStats == null || playerStats.level.level < collectable.level) {
+        color.setAttribute('style','background: rgb(128, 128, 128)');
+    } else {
+        color.setAttribute('style','background: ' + collectable.color.rgb);
+    }
     colorContainer.appendChild(color);
 
     let breakTag1 = document.createElement('br');
