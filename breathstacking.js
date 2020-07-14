@@ -23,7 +23,7 @@ function laneToYCoordinate(lane) {
 // Similarly, input coordinates are specified as time offsets (ms), making it easier to design levels that align with breath stacking timing requiremets (e.g., hold for 2 seconds...)
 // These parameters can be tweaked to adjust the speed of the game
 let levelDurationMillis = 105000;
-let levelStartMillis = -1;
+let levelRunningTime = 0;
 let sceneWidth = 12000;
 function millisToXCoordinate(ms) {
 	return map(ms, 0, levelDurationMillis, 0, sceneWidth);
@@ -57,6 +57,7 @@ let levelUpAnimation;
 
 let backgroundImage; // reyhan
 let titleCard;
+let titleCardDismissed = false;
 
 // Maintain some simple statistics about the players performance in this session
 // (Note that similar "all time" statistics are logged in the player.stats object)
@@ -148,15 +149,22 @@ function setup() {
 function draw() {
 	clear();
 
+	if (!titleCardDismissed) {
+		image(titleCard, 0, 0, width, height);
+		return;
+	}
+
+	levelRunningTime += deltaTime;
+
 	// A naive implementation of a continuous background with panning camera is to simply repeat the background image across the entire scene.
 	// TODO: Only draw the visible images in each frame if this causes a performance hit.
 	for (let x=-backgroundImage.width; x<sceneWidth; x+= backgroundImage.width) {
 		image(backgroundImage, x, 0, backgroundImage.width, height);
 	}
 
-	if (levelStartMillis != -1 && millis()-levelStartMillis <= levelDurationMillis) {
+	if (levelRunningTime <= levelDurationMillis) {
 		// Player moves at a uniform horizontal speed across the level with scrolling camera
-		player.sprite.position.x = millisToXCoordinate(millis()-levelStartMillis);
+		player.sprite.position.x = millisToXCoordinate(levelRunningTime);
 		player.update(deltaTime);
 		if (isForcefulBreathing()) {
 			player.jump();
@@ -188,11 +196,7 @@ function draw() {
 	levelUpAnimation.draw(150, 50);
 	stackBonusAnimation.draw(width/2, height/2);
 
-	if (levelStartMillis == -1) {
-		image(titleCard, 0, 0, width, height);
-	}
-
-	if (millis()-levelStartMillis > levelDurationMillis) {
+	if (levelRunningTime > levelDurationMillis) {
 		drawEndCard();
 	}
 }
@@ -268,7 +272,7 @@ function keyPressed() {
 			break;
 		case ENTER:
 		case RETURN:
-			levelStartMillis = millis();
+			titleCardDismissed = true;
 			break;
 	}
 }
