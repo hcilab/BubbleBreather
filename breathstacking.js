@@ -93,6 +93,7 @@ async function preload() {
 
   sonar = new BreathingSonarJS();
   await sonar.init();
+  sonar.forcefulBreathingThreshold = 0.5;
 }
 
 
