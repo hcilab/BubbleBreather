@@ -146,6 +146,7 @@ function draw() {
 	if (levelStartMillis != -1 && millis()-levelStartMillis <= levelDurationMillis) {
 		// Player moves at a uniform horizontal speed across the level with scrolling camera
 		player.sprite.position.x = millisToXCoordinate(millis()-levelStartMillis);
+		player.update(deltaTime);
 
 		// Test for collisions with collectables
 		// Note that sprite and collectable must be removed separately (p5.game maintains an internal list of sprites)
@@ -273,13 +274,7 @@ function keyPressed() {
 		case 'w':
 			sessionInhaleCount += 1;
 			player.stats.inhaleCount += 1;
-			player.lane = Math.min(player.lane + 1, 4);
-			player.sprite.changeAnimation('inhale');
-			setTimeout(function() { player.sprite.changeAnimation('normal') }.bind(this), 500);
-			break;
-		case 's':
-			player.lane = 0;
-			player.sprite.changeAnimation('normal');
+			player.jump();
 			break;
 		case ' ':
 			levelStartMillis = millis();
@@ -309,6 +304,8 @@ class Player {
 	constructor() {
 		this._loadStats();
 		this._lane = 0;
+		this._jumpTimeout = 0;
+		this._jumpDecay = 0;
 		this.sprite = (createSprite(millisToXCoordinate(millis()), laneToYCoordinate(this._lane)));
 		this.sprite.addImage('normal', playerImage);
 		this.sprite.addAnimation('inhale', playerInhaleAnimation);
@@ -333,6 +330,26 @@ class Player {
 
 	save() {
 		storeItem('stats', JSON.stringify(this.stats));
+	}
+
+	update(dt) {
+		this._jumpTimeout -= dt;
+		this._jumpDecay -= dt;
+		if (this._jumpDecay <= 0) {
+			this.lane = 0;
+		}
+	}
+
+	jump() {
+		if (this._jumpTimeout <= 0) {
+			this.lane += 1;
+			this._jumpTimeout = 1000;
+			this._jumpDecay = 2000;
+			this.sprite.changeAnimation('inhale');
+			setTimeout(function() { this.sprite.changeAnimation('normal') }.bind(this), 500);
+			this.stats.inhaleCount += 1;
+			sessionInhaleCount += 1;
+		}
 	}
 
 	get lane() {
