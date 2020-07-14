@@ -7,10 +7,16 @@ let painting;
 let bubbleWand;
 let nextColor;
 
-let unlockedColors = []
+let unlockedColors = [];
 
+let sonar;
 
-async function setup() {
+async function preload() {
+  sonar = new BreathingSonarJS();
+  await sonar.init();
+}
+
+function setup() {
   createCanvas(windowWidth, windowHeight);
   noCursor();
 
@@ -48,9 +54,9 @@ function draw() {
   clear();
   background(255);
 
-  if (mouseIsPressed && mouseY > 0.9 * height) {
+  if (mouseIsPressed && mouseY > 0.9 * height && isForcefulBreathing()) {
     bubbleWand.absorb(deltaTime);
-  } else if (mouseIsPressed && painting.bubbles.length > 0) {
+  } else if (mouseIsPressed && painting.bubbles.length > 0 && isForcefulBreathing()) {
     bubbleWand.emit(deltaTime);
     let heading = createVector((mouseX-pmouseX)/width, (mouseY-pmouseY)/height).div(5);
     if (heading.mag() > 0.001) {
@@ -81,7 +87,7 @@ function windowResized() {
 }
 
 function mousePressed() {
-  if (mouseY < 0.9 * height) {
+  if (mouseY < 0.9 * height && isForcefulBreathing()) {
     painting.addBubbleGroup(nextColor);
   }
 }
@@ -95,4 +101,8 @@ function mouseReleased() {
     // schedule another save 2.5 sec from now, to capture painting once all animations have finished...
     setTimeout(() => painting.save(), 2500);
   }
+}
+
+function isForcefulBreathing() {
+  return sonar.isForcefulBreathing || (keyIsPressed && key == ' ');
 }
