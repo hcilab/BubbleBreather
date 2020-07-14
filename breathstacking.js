@@ -64,7 +64,9 @@ let sessionStackCount = 0;
 let sessionLevelUpCount = 0;
 
 
-function preload() {
+let sonar;
+
+async function preload() {
 	// @Reyhan - I've quickly made these assets as placeholders for now, but note that animations can be adjusted by editing the files specified in `loadAnimation()` below.
 	// Note that if you add more / fewer animation frames, you may need to tweak the `frameDelay` field below, which specifies the speed of the animation (i.e., the number of game frames to delay before switching animation frames)
 	collectableAnimation = loadAnimation('./assets/collectables/level-0.png', './assets/collectables/level-0-big.png');
@@ -88,6 +90,9 @@ function preload() {
 	// Note that `loadTable()` is asynchronous, so we have to divide level loading across preload() and setup() functions :(
 	collectablesTable = loadTable('./assets/level-1.csv', 'csv', 'header');
 	unlockablesTable = loadTable('./assets/unlockables.csv', 'csv', 'header');
+
+  sonar = new BreathingSonarJS();
+  await sonar.init();
 }
 
 
@@ -147,6 +152,9 @@ function draw() {
 		// Player moves at a uniform horizontal speed across the level with scrolling camera
 		player.sprite.position.x = millisToXCoordinate(millis()-levelStartMillis);
 		player.update(deltaTime);
+		if (isForcefulBreathing()) {
+			player.jump();
+		}
 
 		// Test for collisions with collectables
 		// Note that sprite and collectable must be removed separately (p5.game maintains an internal list of sprites)
@@ -272,14 +280,16 @@ function drawEndCard() {
 function keyPressed() {
 	switch (key) {
 		case 'w':
-			sessionInhaleCount += 1;
-			player.stats.inhaleCount += 1;
 			player.jump();
 			break;
 		case ' ':
 			levelStartMillis = millis();
 			break;
 	}
+}
+
+function isForcefulBreathing() {
+	return sonar.isForcefulBreathing;
 }
 
 
