@@ -1,4 +1,5 @@
 let unlockablesTable;
+let playerStats;
 
 function preload()
 {
@@ -6,6 +7,7 @@ function preload()
 }
 function setup() {
 	noCanvas();
+    playerStats = JSON.parse(getItem('stats'));
 	populatePlayerStats();
 	populateSavedPaintings();
     populateColors();
@@ -14,7 +16,6 @@ function setup() {
 function populatePlayerStats() {
 	let p = select('#playerStatsP');
 	if (p != null) {
-		let playerStats = JSON.parse(getItem('stats'))
 		let content = playerStats == null ? "You haven't collected any bubbles yet!" : parsePlayerStats(playerStats);
 		p.html(content);
 	}
