@@ -66,7 +66,7 @@ let sessionStackCount = 0;
 function preload() {
 	// @Reyhan - I've quickly made these assets as placeholders for now, but note that animations can be adjusted by editing the files specified in `loadAnimation()` below.
 	// Note that if you add more / fewer animation frames, you may need to tweak the `frameDelay` field below, which specifies the speed of the animation (i.e., the number of game frames to delay before switching animation frames)
-	collectableAnimation = loadAnimation('./assets/collectable-0.png', './assets/collectable-1.png');
+	collectableAnimation = loadAnimation('./assets/collectables/level-0.png', './assets/collectables/level-0-big.png');
 
 	playerImage = loadImage('./assets/player_normal.png');
 	playerInhaleAnimation = loadAnimation('./assets/player-inhale-0.png', './assets/player-inhale-1.png', './assets/player-inhale-2.png', './assets/player-inhale-3.png');
