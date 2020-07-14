@@ -15,7 +15,7 @@ let unlockedColors = [];
 let sonar;
 
 async function preload() {
-  titleCard = loadImage('./assets/placeholder.png');
+  titleCard = loadImage('./assets/titlecard.png');
 
   sonar = new BreathingSonarJS();
   await sonar.init();
