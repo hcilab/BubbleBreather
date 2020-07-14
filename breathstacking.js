@@ -61,6 +61,7 @@ let backgroundImage; // reyhan
 // (Note that similar "all time" statistics are logged in the player.stats object)
 let sessionInhaleCount = 0;
 let sessionStackCount = 0;
+let sessionLevelUpCount = 0;
 
 
 function preload() {
@@ -189,6 +190,7 @@ function addScore(n) {
 
 function checkForLevelUp() {
 	if (player.stats.experiencePoints >= player.stats.level.endExp) {
+		sessionLevelUpCount += 1;
 		levelUpAnimation.rewind();
 		levelUpAnimation.play();
 		let nextLevel = unlockables.find(element => element.level == player.stats.level.level + 1);
@@ -256,6 +258,11 @@ function drawEndCard() {
 	textSize(24);
 	text('   Today: ' + sessionInhaleCount + " Inhales & " + sessionStackCount + " Breath Stacks!", width/2, (height/2) + 100);
 	text('All Time: ' + player.stats.inhaleCount + " Inhales & " + player.stats.stackCount + " Breath Stacks!", width/2, (height/2) + 150);
+
+	if (sessionLevelUpCount > 0) {
+		textStyle(BOLD);
+		text("You've unlocked " + sessionLevelUpCount + " new colors! Awesome!", width/2, (height/2) + 200);
+	}
 
 	pop();
 }
