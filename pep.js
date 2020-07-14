@@ -7,6 +7,8 @@ let painting;
 let bubbleWand;
 let nextColor;
 
+let unlockedColors = []
+
 
 async function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -28,8 +30,18 @@ async function setup() {
     painting = Painting.load(id);
   }
 
+  // Populate list of unlocked colors to use in painting from saved player `stats` object
+  // ...if it isn't found, fallback to painting with grey.
+  let stats = getItem('stats');
+  if (stats != null) {
+    unlockedColors = JSON.parse(stats).colors.map(c => color(c.rgb));
+  } else {
+    unlockedColors.push(color('rgb(128, 128, 128)'));
+  }
+
+
   bubbleWand = new BubbleWand();
-  nextColor = color(random(255), random(255), random(255));
+  nextColor = random(unlockedColors);
 }
 
 function draw() {
@@ -77,7 +89,7 @@ function mousePressed() {
 function mouseReleased() {
   // i.e., only when above bubble recharge zone
   if (mouseY < 0.9 * height) {
-    nextColor = color(random(255), random(255), random(255));
+    nextColor = random(unlockedColors);
     painting.save();
 
     // schedule another save 2.5 sec from now, to capture painting once all animations have finished...
