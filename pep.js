@@ -7,11 +7,16 @@ let painting;
 let bubbleWand;
 let nextColor;
 
+let titleCard;
+let titleCardDismissed = false;
+
 let unlockedColors = [];
 
 let sonar;
 
 async function preload() {
+  titleCard = loadImage('./assets/placeholder.png');
+
   sonar = new BreathingSonarJS();
   await sonar.init();
 }
@@ -53,6 +58,12 @@ function setup() {
 function draw() {
   clear();
   background(255);
+
+  if (!titleCardDismissed) {
+    image(titleCard, 0, 0, width, height);
+    return
+  }
+
 
   if (mouseIsPressed && mouseY > 0.9 * height && isForcefulBreathing()) {
     bubbleWand.absorb(deltaTime);
@@ -100,6 +111,12 @@ function mouseReleased() {
 
     // schedule another save 2.5 sec from now, to capture painting once all animations have finished...
     setTimeout(() => painting.save(), 2500);
+  }
+}
+
+function keyPressed() {
+  if (keyCode == ENTER || keyCode == RETURN) {
+    titleCardDismissed = true;
   }
 }
 
