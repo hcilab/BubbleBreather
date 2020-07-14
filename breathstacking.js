@@ -289,7 +289,7 @@ function keyPressed() {
 }
 
 function isForcefulBreathing() {
-	return sonar.isForcefulBreathing;
+	return millis() > 10000 && sonar.isForcefulBreathing;
 }
 
 
