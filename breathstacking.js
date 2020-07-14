@@ -353,8 +353,8 @@ class Player {
 	jump() {
 		if (this._jumpTimeout <= 0) {
 			this.lane += 1;
-			this._jumpTimeout = 1000;
-			this._jumpDecay = 2000;
+			this._jumpTimeout = 1500;
+			this._jumpDecay = 3000;
 			this.sprite.changeAnimation('inhale');
 			setTimeout(function() { this.sprite.changeAnimation('normal') }.bind(this), 500);
 			this.stats.inhaleCount += 1;
