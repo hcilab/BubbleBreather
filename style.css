@@ -127,6 +127,15 @@ ol {
   color: #979797;
 }
 
+.expPoints {
+  font-family: Muli;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 45px;
+  color: #ACA5FA;
+}
+
 .progressbar {
   background-color: #e5e5e5;
   width: 271px;
@@ -214,7 +223,7 @@ ol {
   width: 578px;
   height: 100%;
   flex-grow: 1;
-  margin-top: 70px;
+  margin-top: 92px;
 }
 
 .rightTop {
