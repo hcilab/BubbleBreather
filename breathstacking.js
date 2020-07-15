@@ -88,7 +88,7 @@ async function preload() {
 	stackBonusAnimation.goToFrame(stackBonusAnimation.getLastFrame());
 
 	backgroundImage = loadImage('./assets/background.png'); // reyhan
-	titleCard = loadImage('./assets/titlecard.png');
+	titleCard = loadImage('./assets/titlecard-float.png');
 
 	// Note that `loadTable()` is asynchronous, so we have to divide level loading across preload() and setup() functions :(
 	collectablesTable = loadTable('./assets/level-1.csv', 'csv', 'header');
