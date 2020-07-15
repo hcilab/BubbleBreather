@@ -87,7 +87,8 @@ function draw() {
   rect(0, 0.9*height, width, 0.1*height);
   strokeWeight(0.1);
   fill(0);
-  text('Recharge bubble wand here...', 5, 0.91*height);
+  text('Recharge bubble wand here...', 5, 0.95*height);
+  text('Press space bar to simulate inhale or exhale.\nUse the mouse to position wand and hold leftmouse button to interact once breathing.\nOn canvas exhale, over recharge bar inhale.', width - 500, 20);
   pop();
 
   bubbleWand.draw(mouseX, mouseY);

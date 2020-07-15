@@ -199,6 +199,8 @@ function draw() {
 	if (levelRunningTime > levelDurationMillis) {
 		drawEndCard();
 	}
+
+	text('Use up arrow to simulate inhale.', width - 400, 20);
 }
 
 function addScore(n) {

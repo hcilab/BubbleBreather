@@ -190,13 +190,13 @@ ol {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   width: 125px;
-  height: 93px;
+  height: 150px;
   margin-right: 21px;
   font-size: 24px;
   line-height: 20px;
   padding-left: 17px;
   padding-top: 22px;
-  display: flex;
+  /*display: flex;*/
   padding-bottom: 22px;
   transition: all 0.5s;
   text-decoration: none;
@@ -207,12 +207,14 @@ ol {
   background-color: #aca5fa;
   color: #ffffff;
 }
-.gameLink span {
-  align-self: flex-end;
+.gameLink div{
+  /*align-self: flex-end;*/
+    padding: 10px;
+    font-size: 10pt;
 }
 
 .helpButton {
- margin-top: 17px; 
+ margin-top: 50px; 
 }
 
 .helpLeft {
@@ -315,6 +317,11 @@ ol {
   grid-template-columns: repeat(auto-fit, 72px);
   grid-column-gap: 17px;
   grid-row-gap: 10px;
+  text-align: center;
+}
+.paint {
+  line-height: normal;
+  font-size: 6pt;
 }
 
 .paint svg {

@@ -46,6 +46,7 @@ function populateSavedPaintings() {
     		let thumb = document.createElement('iframe');
             thumb.setAttribute("src",url);
             thumb.setAttribute("class","thumbFrame");
+            thumb.setAttribute("scrolling","no");
 
             paintingLink.appendChild(thumb);
 
@@ -60,6 +61,33 @@ function populateSavedPaintings() {
 
 function populateColors()
 {
+    let colorData = [];
+    for (let j = 0; j < unlockablesTable.getRowCount(); j++){
+        let r = unlockablesTable.rows[j];
+
+        let color =  {
+                level: r.getNum('level'),
+                startExp: r.getNum('startExp'),
+                endExp: r.getNum('endExp'),
+                color: {
+                    name: r.getString('name'),
+                    rgb: r.getString('rgb')
+                }
+            }
+        colorData.push(color);
+    }
+    let paints = selectAll('.paint');
+    paints.forEach((c, index)=> {
+        if (index < colorData.length)
+        {
+            let colorText = document.createTextNode(colorData[index].color.name);
+            c.child(colorText);
+            let breakTag1 = document.createElement('br');
+            c.child(breakTag1);
+            let xpText = document.createTextNode(colorData[index].startExp + " points");
+            c.child(xpText);
+        }
+    });
     if (playerStats) {
         let paintBubbles = selectAll('.paintBubble');
         const paintBubbleNames = document.querySelectorAll(".paintName");
@@ -68,9 +96,6 @@ function populateColors()
         playerStats.colors.forEach((c, index) => {
             try {
                 paintBubbles[index].style('fill', c.rgb);
-                paintBubbleNames[index].innerText = c.name;
-                // Autogenerating required points
-                paintBubblePoints[index].innerText = `${2 * index}k points`;
             } catch(error) {}
         });
     }
