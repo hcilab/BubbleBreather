@@ -9,7 +9,19 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
 
     <title>Bubble Breather | Help</title>
-  </head>
+
+    <script>
+      async function testMic() {
+        try {
+          await navigator.mediaDevices.getUserMedia({audio: true});
+          alert("Your microphone is working.");
+        } catch (error) {
+          alert("Your microphone is not working.")
+        }
+      }
+    </script>
+  
+    </head>
   <body>
     <a href="./index.html">
       <img id="backButton" src="./assets/back.png"/>
@@ -111,6 +123,10 @@
             <br />
             Avoid unnecessary movement: Bubble Breather senses your breathing by detecting subtle movements in your chest and abdomen -- therefore, any large movements can interfere with the games ability to sense your breathing accurately.
           </p>
+          <button class="testmic" onclick="testMic()">
+            Test Your Microphone
+          </button>
+       
         </div>
       </div>
     </div>
