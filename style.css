@@ -131,9 +131,12 @@ ol {
   font-family: Muli;
   font-style: normal;
   font-weight: bold;
-  font-size: 36px;
+  font-size: 40px;
   line-height: 45px;
-  color: #ACA5FA;
+  background: -webkit-linear-gradient(top, #88abea 0%, #567db3 100%);
+  background: linear-gradient(325deg, #FAE5A5 0%, #ACA5FA 100%);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
 }
 
 .progressbar {
