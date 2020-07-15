@@ -276,16 +276,25 @@ ol {
   margin-right: 16px;
 }
 
+.paintName, .paintPoints {
+  font-size: 12px;
+  text-align: center;
+  display: block;
+  line-height: 21px;
+  color: grey;
+}
+
 .rightBottom {
   width: 100%;
-  height: 321px;
   background: #ffffff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   font-size: 24px;
   line-height: 35px;
   padding-top: 26px;
+  padding-bottom: 26px;
   padding-left: 30px;
+  padding-right: 30px;
   overflow: hidden;
   position: relative;
 }
@@ -302,10 +311,10 @@ ol {
 .paintGrid {
   margin-top: 36px;
   width: 100%;
-  height: 200px;
   display: grid;
-  grid-template-columns: repeat(10, 72px);
+  grid-template-columns: repeat(auto-fit, 72px);
   grid-column-gap: 17px;
+  grid-row-gap: 10px;
 }
 
 .paint svg {

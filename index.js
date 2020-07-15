@@ -62,8 +62,16 @@ function populateColors()
 {
     if (playerStats) {
         let paintBubbles = selectAll('.paintBubble');
+        const paintBubbleNames = document.querySelectorAll(".paintName");
+        const paintBubblePoints = document.querySelectorAll(".paintPoints");
+
         playerStats.colors.forEach((c, index) => {
-            paintBubbles[index].style('fill', c.rgb);
+            try {
+                paintBubbles[index].style('fill', c.rgb);
+                paintBubbleNames[index].innerText = c.name;
+                // Autogenerating required points
+                paintBubblePoints[index].innerText = `${2 * index}k points`;
+            } catch(error) {}
         });
     }
 }
