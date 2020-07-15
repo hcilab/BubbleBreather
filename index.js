@@ -20,7 +20,7 @@ function populatePlayerStats() {
 
     if (playerStats) {
         playerLevel.html('Level ' + playerStats.level.level);
-        experiencePoints.html(playerStats.experiencePoints + ' exp.');
+        experiencePoints.html(playerStats.experiencePoints + ' points');
         stackedBreathingCount.html(playerStats.stackCount + ' stacks');
     }
 }
