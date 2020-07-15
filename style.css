@@ -384,3 +384,11 @@ div.colorMenu {
 .linkwrap iframe {
   z-index: 2;
 }
+
+#backButton {
+  position: fixed;
+  width: 70px;
+  height: 70px;
+  top: 5px;
+  left: 5px;
+}

@@ -141,7 +141,7 @@ function setup() {
 	});
 
 	player = new Player();
-	experiencePointsBar = new ExperiencePointsBar(20, 20, 0.2 * width, 20);
+	experiencePointsBar = new ExperiencePointsBar(100, 20, 0.2 * width, 20);
 	experiencePointsBar.configureForPlayer(player);
 }
 
