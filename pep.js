@@ -23,7 +23,6 @@ async function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  noCursor();
 
   // retrieve the list of existing paintings
   savedPaintings = JSON.parse(getItem('savedPaintings'));
@@ -63,6 +62,7 @@ function draw() {
     image(titleCard, 0, 0, width, height);
     return
   }
+  noCursor();
 
 
   if (mouseIsPressed && mouseY > 0.9 * height && isForcefulBreathing()) {
