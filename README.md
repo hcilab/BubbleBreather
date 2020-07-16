@@ -37,7 +37,7 @@ chrome://flags/#allow-insecure-localhost
 
 Bubble Breather has currently been tested on studio-quality microphones, such as the Blue Yeti USB mic. 
 
-However, the game is being actively developed to support more speaker and microphone setups. To view a diagnostics page and test your current speaker and microphone configuration, visit: ./diagnostics.html
+However, the game is being actively developed to support more speaker and microphone setups. To view a diagnostics page and test your current speaker and microphone configuration, visit: https://hcilab.github.io/BubbleBreather/diagnostics.html
 
 
 
@@ -53,4 +53,4 @@ In Bubble Paint, hold the spacebar while painting to disable the breathing requi
 
 # Reseting Saved Game Progress
 
-All saved game data can be deleted by visiting: ./reset.html
+All saved game data can be deleted by visiting: https://hcilab.github.io/BubbleBreather/reset.html
