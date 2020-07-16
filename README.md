@@ -51,6 +51,14 @@ In Bubble Paint, hold the spacebar while painting to disable the breathing requi
 
 
 
-# Reseting Saved Game Progress
+## Debugging Utilities
+
+Bubble Breather stores all saved data locally using `Window.localStorage`. 
+
+To dowload this data in plain text format, visit: https://hcilab.github.io/BubbleBreather/logSavedData.html
+
+
+
+## Reseting Saved Game Progress
 
 All saved game data can be deleted by visiting: https://hcilab.github.io/BubbleBreather/reset.html
