@@ -2,43 +2,55 @@
 
 Bubble Breather is a collection of games and activities that target breathing rehab exercise used during recovery from pneumonia.
 
-# Demo
+
+
+## Demo
 
 A live demo of the game can be found here: https://hcilab.github.io/BubbleBreather/
 
 
-# Painting with Bubbles (PEP Therapy)
 
-Positive Expiratory Pressure (PEP) Therapy is an exercise that helps patients inflate the narrow passages within their lungs and dislodge the fuilds and mucus that can make it difficult to breathe. In this game, players practice PEP therapy to create one-of-a-kind pieces of bubble art.
+## Hosting the game locally
 
+To access your microphone, Bubble Breather must be hosted using an https server. One easy tool for accomplishing this is http-server-ssl, which can be downloaded and installed here: https://www.npmjs.com/package/http-server-ssl
 
-## Controls
+Once installed, the server can be launched by running the following command in the games top-level project directory:
 
-The game is currently played using the mouse. 
-
-- Click, hold, and drag anywhere on screen to draw with bubbles
-- Click and hold in the bottom region (bubble recharge zone) to refill your bubble wand
+http-server-ssl -S
 
 
-# Unlocking Colors (Breath Stacking)
-
-Breath Stacking is an exercise that help patients take deeper breaths by "stacking" a series of inhales one-on-top-of the next. In this game, players practice breath stacking to collect bubbles, which allowing them to level up and unlock new colors that can be used to create bubble art.
-
-## Controls
-
-The game is currently played using the keyboard:
-
-|Key  |Action|
-|:---:|:----:|
-|W    |Jump  |
-|S    |Fall  |
-
-
-# Reseting Game Progress
-
-All saved game data can be deleted here: https://hcilab.github.io/BubbleBreather/reset.html
+Using the output of this command, navigate to the appropriate localhost url in your browser.
 
 
 
+## Browser Support and Unsigned SSL Certificates
 
- 
+Bubble breather is currently only supported on Google Chrome. 
+
+However, by default, Chrome does not allow users to visit unsigned https domains (which is the case with http-server-ssl, by default). This restriction can be disabled for locally hosted domains by enabling the following developer setting:
+
+chrome://flags/#allow-insecure-localhost
+
+
+
+## Testing your Speaker and Microphone
+
+Bubble Breather has currently been tested on studio-quality microphones, such as the Blue Yeti USB mic. 
+
+However, the game is being actively developed to support more speaker and microphone setups. To view a diagnostics page and test your current speaker and microphone configuration, visit: ./diagnostics.html
+
+
+
+## Keyboard and Mouse Controls
+
+For demonstration purposes, keyboard and mouse support has been added to Bubble Breather.
+
+In Bubble Float, use the up-arrow to jump.
+
+In Bubble Paint, hold the spacebar while painting to disable the breathing requirements (i.e., you'll be able to paint simply by clicking-and-holding the mouse).
+
+
+
+# Reseting Saved Game Progress
+
+All saved game data can be deleted by visiting: ./reset.html
