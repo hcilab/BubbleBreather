@@ -211,9 +211,9 @@ class BubbleWand {
     let size =  0.02 * Math.min(width, height);
     let sizeCompoundingFactor = 1.1;
 
-    noStroke();
     this.c.setAlpha(200);
     fill(this.c);
+    stroke(0);
 
     ellipse(0, 0, size, size);
     for (let i=0; i<Math.floor(this.remainingTime / 100); i++) {
@@ -224,5 +224,36 @@ class BubbleWand {
     let angle = map(this.remainingTime % 100, 0, 100, 0, 2*PI);
     arc(0, 0, size, size, 0, angle);
     pop();
+  }
+}
+
+
+class PaintCan {
+  constructor(x, y, r, img, c=color(128,128,128)) {
+    this.x = x;
+    this.y = y;
+    this.r = r;
+    this.img = img;
+    this.c = c;
+  }
+
+  draw() {
+    push();
+    translate(this.x, this.y);
+    scale(this.r);
+
+    ellipseMode(CENTER);
+    noStroke();
+    fill(this.c);
+    ellipse(0,0,2,2);
+
+    imageMode(CENTER);
+    image(img, 0, 0, 1, 1);
+    pop();
+  }
+
+  contains(x, y) {
+    let v = createVector(this.x-x, this.y-y);
+    return v.mag() <= this.r;
   }
 }

@@ -11,12 +11,16 @@ let isPainting = false;
 let titleCard;
 let titleCardDismissed = false;
 
+let paintCan;
+let paintCanImage;
+
 let unlockedColors = [];
 
 let sonar;
 
 async function preload() {
   titleCard = loadImage('./assets/titlecard-paint.png');
+  paintCanImage = loadImage('./assets/paint-can.png');
 
   sonar = new BreathingSonarJS();
   await sonar.init();
@@ -53,6 +57,7 @@ function setup() {
 
   nextColor = random(unlockedColors);
   bubbleWand = new BubbleWand(color(nextColor.toString()));
+  paintCan = new PaintCan(w=0.05*width, h=0.9*height, d=Math.min(0.25*width, 0.25*height), img=paintCanImage, c=color(nextColor.toString()));
 }
 
 function draw() {
@@ -65,33 +70,24 @@ function draw() {
   }
   noCursor();
 
-
-  if (mouseIsPressed && mouseY > 0.9 * height && isForcefulBreathing()) {
-    bubbleWand.absorb(deltaTime);
-  } else if (mouseIsPressed && painting.bubbles.length > 0 && isForcefulBreathing()) {
-    bubbleWand.emit(deltaTime);
-    let heading = createVector((mouseX-pmouseX)/width, (mouseY-pmouseY)/height).div(5);
-    if (heading.mag() > 0.001) {
-      painting.blow(mouseX/width, mouseY/height, deltaTime, heading);
-    } else {
-      painting.blow(mouseX/width, mouseY/height, deltaTime);
+  if (mouseIsPressed && isForcefulBreathing()) {
+    if (paintCan.contains(mouseX, mouseY)) {
+      bubbleWand.absorb(deltaTime);
+    } else if (painting.bubbles.length > 0) {
+      bubbleWand.emit(deltaTime);
+      let heading = createVector((mouseX-pmouseX)/width, (mouseY-pmouseY)/height).div(5);
+      if (heading.mag() > 0.001) {
+        painting.blow(mouseX/width, mouseY/height, deltaTime, heading);
+      } else {
+        painting.blow(mouseX/width, mouseY/height, deltaTime);
+      }
     }
   }
 
   painting.update(deltaTime);
   painting.draw();
 
-  push();
-  stroke(0);
-  fill(255, 150);
-  rectMode(CORNER);
-  rect(0, 0.9*height, width, 0.1*height);
-  strokeWeight(0.1);
-  fill(0);
-  text('Recharge bubble wand here...', 5, 0.95*height);
-  text('Press space bar to simulate inhale or exhale.\nUse the mouse to position wand and hold leftmouse button to interact once breathing.\nOn canvas exhale, over recharge bar inhale.', width - 500, 20);
-  pop();
-
+  paintCan.draw();
   bubbleWand.draw(mouseX, mouseY);
 }
 
@@ -100,7 +96,7 @@ function windowResized() {
 }
 
 function mousePressed() {
-  if (mouseY < 0.9 * height && isForcefulBreathing()) {
+  if (!paintCan.contains(mouseX, mouseY) && isForcefulBreathing()) {
     painting.addBubbleGroup(color(nextColor.toString()));
     isPainting = true;
   }
@@ -108,10 +104,11 @@ function mousePressed() {
 
 function mouseReleased() {
   // i.e., only when above bubble recharge zone
-  if (mouseY < 0.9 * height && isPainting) {
+  if (isPainting) {
     isPainting = false;
     nextColor = random(unlockedColors);
     bubbleWand.c = color(nextColor.toString());
+    paintCan.c = color(nextColor.toString());
     painting.save();
 
     // schedule another save 2.5 sec from now, to capture painting once all animations have finished...
