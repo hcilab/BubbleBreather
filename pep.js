@@ -6,6 +6,7 @@ let savedPaintings = [];
 let painting;
 let bubbleWand;
 let nextColor;
+let isPainting = false;
 
 let titleCard;
 let titleCardDismissed = false;
@@ -101,12 +102,14 @@ function windowResized() {
 function mousePressed() {
   if (mouseY < 0.9 * height && isForcefulBreathing()) {
     painting.addBubbleGroup(nextColor);
+    isPainting = true;
   }
 }
 
 function mouseReleased() {
   // i.e., only when above bubble recharge zone
-  if (mouseY < 0.9 * height) {
+  if (mouseY < 0.9 * height && isPainting) {
+    isPainting = false;
     nextColor = random(unlockedColors);
     painting.save();
 
