@@ -89,6 +89,28 @@ function draw() {
 
   paintCan.draw();
   bubbleWand.draw(mouseX, mouseY);
+
+  if (isPainting) {
+    drawExhaleRewardIcon();
+  }
+}
+
+function drawExhaleRewardIcon() {
+  // Position the icon top-right of the mouse cursor by default, but dodge to other positions when close to window boundaries
+  let x = mouseX < 0.9*width ? mouseX + 0.025*width : mouseX - 0.025*width;
+  let y = mouseY < 0.1*height ? mouseY + 0.025*height : mouseY - 0.025*height;
+
+  // Progressively increase font size each second that passes to incentivize prolonging exhale
+  let exhaleTimeSeconds = floor(painting.bubbles[painting.bubbles.length-1].t / 1000);
+  let fontSize = 20 + exhaleTimeSeconds*20;
+
+  push();
+  stroke(0);
+  fill(0);
+  textSize(fontSize);
+  textAlign(CENTER, CENTER)
+  text(exhaleTimeSeconds + 's' , x, y);
+  pop();
 }
 
 function windowResized() {
