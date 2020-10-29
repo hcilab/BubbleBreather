@@ -191,8 +191,9 @@ class Bubble {
 
 
 class BubbleWand {
-  constructor() {
+  constructor(c=color(128,128,128)) {
     this.remainingTime = 0;
+    this.c = c;
   }
 
   absorb(dt) {
@@ -210,7 +211,6 @@ class BubbleWand {
     let size =  0.02 * Math.min(width, height);
     let sizeCompoundingFactor = 1.1;
 
-    let c = color(nextColor.toString());
     c.setAlpha(200);
     fill(c);
     noStroke();

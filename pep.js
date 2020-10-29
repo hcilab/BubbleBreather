@@ -51,8 +51,8 @@ function setup() {
   }
 
 
-  bubbleWand = new BubbleWand();
   nextColor = random(unlockedColors);
+  bubbleWand = new BubbleWand(color(nextColor.toString()));
 }
 
 function draw() {
@@ -101,7 +101,7 @@ function windowResized() {
 
 function mousePressed() {
   if (mouseY < 0.9 * height && isForcefulBreathing()) {
-    painting.addBubbleGroup(nextColor);
+    painting.addBubbleGroup(color(nextColor.toString()));
     isPainting = true;
   }
 }
@@ -111,6 +111,7 @@ function mouseReleased() {
   if (mouseY < 0.9 * height && isPainting) {
     isPainting = false;
     nextColor = random(unlockedColors);
+    bubbleWand.c = color(nextColor.toString());
     painting.save();
 
     // schedule another save 2.5 sec from now, to capture painting once all animations have finished...
