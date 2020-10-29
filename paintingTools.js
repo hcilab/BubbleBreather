@@ -211,9 +211,9 @@ class BubbleWand {
     let size =  0.02 * Math.min(width, height);
     let sizeCompoundingFactor = 1.1;
 
-    c.setAlpha(200);
-    fill(c);
     noStroke();
+    this.c.setAlpha(200);
+    fill(this.c);
 
     ellipse(0, 0, size, size);
     for (let i=0; i<Math.floor(this.remainingTime / 100); i++) {
